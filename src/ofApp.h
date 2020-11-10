@@ -11,8 +11,12 @@ class ofApp : public ofBaseApp{
 		void draw();
 		void keyPressed(int key);
 		ofxAutoReloadedShader shader;
-		ofFbo fbo;
+		ofShader blurX, blurY;
+
+		ofEasyCam cam;
+		ofFbo fbo, bpassOne, bpassTone;
 		float grow;
 		ofImage img;
+
 		
 };
