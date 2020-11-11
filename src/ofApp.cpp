@@ -12,7 +12,7 @@ void ofApp::setup(){
     blurX.load("blurX");
     blurY.load("blurY");
     grow =300;
-    ofSeedRandom(140);
+    ofSeedRandom(6);
 
 
     //fbo
@@ -42,18 +42,8 @@ void ofApp::setup(){
 
 
 }
-
-
 //--------------------------------------------------------------
-void ofApp::update(){
-fbo.begin();
-ofClear(0,0,0,255);
-fbo.end();
-   
-}
-
-//--------------------------------------------------------------
-void ofApp::draw(){
+void ofApp::waves(){
     fbo.begin();
     cam.begin();
     ofNoFill();
@@ -65,28 +55,44 @@ void ofApp::draw(){
 
     ofDrawCircle(0,0,ofRandom(grow));
     glDisable(GL_BLEND);
-    //ofFill();
+    
     //ofSetColor(ofColor::white);
    
     shader.end();
-     ofDrawIcoSphere(10);
+     //ofDrawIcoSphere(5);
     cam.end();
     fbo.end();
-    fbo.draw(0,0);   
-    // bpassOne.begin();
-    // blurX.begin();
-    // blurX.setUniform1f("blurAmnt",0.3);
-    // fbo.draw(0,0);
-    // blurX.end();
-    // bpassOne.end();
 
-    // bpassTone.begin();
-    // blurY.begin();
-    // blurY.setUniform1f("blurAmnt",0.6);
-    // bpassTone.draw(0,0);
-    // blurY.end();
-    // bpassTone.draw(0,0);
 
+    
+    bpassOne.begin();
+   blurX.begin();
+     blurX.setUniform1f("blurAmnt",0.2);
+     fbo.draw(0,0);
+    blurY.end();
+   bpassOne.end();
+
+    bpassTone.begin();
+    blurY.begin();
+        blurY.setUniform1f("blurAmnt",2.8);
+        bpassOne.draw(0,0);
+    bpassTone.end();
+
+    bpassTone.draw(0,0);
+   
+}
+
+//--------------------------------------------------------------
+void ofApp::update(){
+fbo.begin();
+ofClear(0,0,0,255);
+fbo.end();
+   
+}
+
+//--------------------------------------------------------------
+void ofApp::draw(){
+    waves();
 }
 
 //--------------------------------------------------------------

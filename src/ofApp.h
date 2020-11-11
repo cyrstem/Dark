@@ -8,6 +8,7 @@ class ofApp : public ofBaseApp{
 	public:
 		void setup();
 		void update();
+		void waves();
 		void draw();
 		void keyPressed(int key);
 		ofxAutoReloadedShader shader;
