@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Particle.h"
 #include "ofxAutoReloadedShader.h"
 class Wave{
 	public:
@@ -33,6 +34,7 @@ class ofApp : public ofBaseApp{
 		void waves();
 		void draw();
 		void keyPressed(int key);
+		void mousePressed(int x, int y, int button );
 		ofxAutoReloadedShader shader;
 		ofShader blurX, blurY;
 
@@ -41,6 +43,10 @@ class ofApp : public ofBaseApp{
 		float grow;
 		ofImage img;
 		Wave w, w1,w2;
+
+		float gravity; 
+		float repelScale;
+		vector<Particle> particles;
 
 		
 };
