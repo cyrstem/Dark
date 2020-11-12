@@ -4,6 +4,7 @@
 void ofApp::setup(){
     ofEnableAlphaBlending();
     ofEnableAntiAliasing();
+    
     ofBackground(ofColor::black);
     ofSetWindowShape(1200,900);
     ofSetCircleResolution(160);
@@ -40,7 +41,6 @@ void ofApp::setup(){
 
 
 
-
 }
 //--------------------------------------------------------------
 void ofApp::waves(){
@@ -52,14 +52,11 @@ void ofApp::waves(){
     shader.setUniform2f("resolution",ofGetWidth(),ofGetHeight());
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    ofDrawCircle(0,0,ofRandom(grow));
+    w.show(300, 3.4);
+    w1.show(150, 0);
+    w2.show(75, 10);
     glDisable(GL_BLEND);
-    
-    //ofSetColor(ofColor::white);
-   
     shader.end();
-     //ofDrawIcoSphere(5);
     cam.end();
     fbo.end();
 
@@ -67,14 +64,14 @@ void ofApp::waves(){
     
     bpassOne.begin();
    blurX.begin();
-     blurX.setUniform1f("blurAmnt",0.2);
+     blurX.setUniform1f("blurAmnt",0.3);
      fbo.draw(0,0);
     blurY.end();
    bpassOne.end();
 
     bpassTone.begin();
     blurY.begin();
-        blurY.setUniform1f("blurAmnt",2.8);
+        blurY.setUniform1f("blurAmnt",0.3);
         bpassOne.draw(0,0);
     bpassTone.end();
 
