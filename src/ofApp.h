@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 #include "ofxAutoReloadedShader.h"
-#include "ofxMaxim.h"
 class Wave{
 	public:
 	int resolution = 300;
@@ -11,7 +10,7 @@ class Wave{
 
 	ofMesh line;
 	void update(){
-		line.setMode(ofPrimitiveMode::OF_PRIMITIVE_LINE_STRIP);
+		line.setMode(ofPrimitiveMode::OF_PRIMITIVE_TRIANGLE_STRIP);
 		ofSoundUpdate();
 		float *spectrum = ofSoundGetSpectrum (256);
 		double level = 0;
@@ -33,26 +32,18 @@ class Wave{
 
 		for(int i = 0; i<resolution; i++){
 			float angle = ofMap(i,0,resolution, 0 , TWO_PI *2);
-			float x = cos(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
-			float y = sin(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
-			float z = sin(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
+			float x = sin(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
+			float y = cos(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
+			float z = cos(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
 			line.addVertex(ofPoint(x,y,z));
 			line.addColor(ofFloatColor(255,255,255));
 		}
+
 		line.draw();
 	}
 };
 
 class ofApp : public ofBaseApp{
-
-	//maxim 
-	maxiOsc m_osc_wave;
-	maxiFFT m_fft;
-
-	unsigned int m_sample_rate;
-	unsigned int m_buffer_size;
-
-
 	public:
 		void setup();
 		void update();
@@ -65,8 +56,8 @@ class ofApp : public ofBaseApp{
 		ofxAutoReloadedShader shader;
 		ofShader blurX, blurY;
 		ofSoundPlayer song;
-		ofCamera cam;
-		//ofEasyCam cam;
+		//ofCamera cam;
+		ofEasyCam cam;
 		ofFbo fbo, bpassOne, bpassTone;
 		float grow;
 		ofImage img;

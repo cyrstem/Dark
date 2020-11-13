@@ -39,14 +39,14 @@ void ofApp::setup(){
     bpassTone.end();
 
     song.load("2.mp3");
-    cam.setPosition(0,0,1000);
+    cam.setPosition(0,0,2000);
 
     auto center = glm::vec3(0,0,0);
     
     cam.lookAt(center);
   
 
-    rotate = 214;
+    rotate = 234;
 
 
 }
@@ -62,7 +62,9 @@ void ofApp::waves(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     ofRotateX(rotate);
-    w.show(500, 3.4);
+
+        w.show(500, 3.4);
+
     glDisable(GL_BLEND);
     shader.end();
     cam.end();
@@ -71,18 +73,15 @@ void ofApp::waves(){
    blurX.begin();
      blurX.setUniform1f("blurAmnt",0.1);
      fbo.draw(0,0);
-    blurY.end();
+    blurX.end();
    bpassOne.end();
 
     bpassTone.begin();
+
     blurY.begin();
         blurY.setUniform1f("blurAmnt",0.1);
         bpassOne.draw(0,0);
-    
-
-    ofPushMatrix();
-    ofDrawBitmapStringHighlight("reddddd",30,30,ofColor::red,ofColor::white);
-    ofPopMatrix();
+        blurY.end();
     bpassTone.end();
 
     bpassTone.draw(0,0);
@@ -103,9 +102,10 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
    
-   waves();
-   
-
+    waves();
+    ofPushMatrix();
+    ofDrawBitmapStringHighlight("Debug ",0,30,ofColor::red,ofColor::white);
+    ofPopMatrix();
   
     
 }
