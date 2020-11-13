@@ -2,30 +2,56 @@
 
 #include "ofMain.h"
 #include "ofxAutoReloadedShader.h"
+#include "ofxMaxim.h"
 class Wave{
 	public:
 	int resolution = 300;
     float radius;
-    
-		ofPolyline line;
+	float reaction;
 
-	void show( float _radios, float _nV){
-		float noiseHeight = _nV + ofGetElapsedTimef();
-		radius =_radios;
-		 ofBeginShape();
-		for (int i = 0; i < resolution; i++) {
-			float angle = ofMap(i, 0, resolution, 0, PI * 2);
-			float x = cos(angle) * (radius + ofNoise(i, 0.566) * noiseHeight);
-			float y = sin(angle) * (radius + ofNoise(i, 0.566) * noiseHeight);
-			ofVertex(x , y);
-			line.addVertex(x + 200, y);
+	ofMesh line;
+	void update(){
+		line.setMode(ofPrimitiveMode::OF_PRIMITIVE_LINE_STRIP);
+		ofSoundUpdate();
+		float *spectrum = ofSoundGetSpectrum (256);
+		double level = 0;
+		for (int i = 0; i < 256; i++)
+		{
+			level+=spectrum[i]* spectrum[i];
+
 		}
+		level = sqrt(level/256);
+		reaction = ofMap(level, 0,1, 0.1 ,500);
+
+	
 		
-		ofEndShape(true);
+	}
+	void show( float _radios, float _nV){
+		line.clear();
+		float noiseHeight = _nV + reaction;
+		radius =_radios;
+
+		for(int i = 0; i<resolution; i++){
+			float angle = ofMap(i,0,resolution, 0 , TWO_PI *2);
+			float x = cos(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
+			float y = sin(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
+			float z = sin(angle) * (radius + ofNoise(i, reaction) * noiseHeight);
+			line.addVertex(ofPoint(x,y,z));
+			line.addColor(ofFloatColor(255,255,255));
+		}
+		line.draw();
 	}
 };
 
 class ofApp : public ofBaseApp{
+
+	//maxim 
+	maxiOsc m_osc_wave;
+	maxiFFT m_fft;
+
+	unsigned int m_sample_rate;
+	unsigned int m_buffer_size;
+
 
 	public:
 		void setup();
@@ -33,14 +59,20 @@ class ofApp : public ofBaseApp{
 		void waves();
 		void draw();
 		void keyPressed(int key);
+		void exit();
+    	void audioOut(float *output, int buffer_size, int channels);
+		
 		ofxAutoReloadedShader shader;
 		ofShader blurX, blurY;
-
-		ofEasyCam cam;
+		ofSoundPlayer song;
+		ofCamera cam;
+		//ofEasyCam cam;
 		ofFbo fbo, bpassOne, bpassTone;
 		float grow;
 		ofImage img;
-		Wave w, w1,w2;
+		Wave w, w1,w2,w3,w4,w5;
+		float rotate;
+
 
 		
 };

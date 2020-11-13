@@ -38,12 +38,21 @@ void ofApp::setup(){
         ofClear(0,0,0,255);
     bpassTone.end();
 
+    song.load("2.mp3");
+    cam.setPosition(0,0,1000);
 
+    auto center = glm::vec3(0,0,0);
+    
+    cam.lookAt(center);
+  
+
+    rotate = 214;
 
 
 }
 //--------------------------------------------------------------
 void ofApp::waves(){
+
     fbo.begin();
     cam.begin();
     ofNoFill();
@@ -52,44 +61,57 @@ void ofApp::waves(){
     shader.setUniform2f("resolution",ofGetWidth(),ofGetHeight());
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    w.show(300, 3.4);
-    w1.show(150, 0);
-    w2.show(75, 10);
+    ofRotateX(rotate);
+    w.show(500, 3.4);
     glDisable(GL_BLEND);
     shader.end();
     cam.end();
-    fbo.end();
-
-
-    
+    fbo.end();  
     bpassOne.begin();
    blurX.begin();
-     blurX.setUniform1f("blurAmnt",0.3);
+     blurX.setUniform1f("blurAmnt",0.1);
      fbo.draw(0,0);
     blurY.end();
    bpassOne.end();
 
     bpassTone.begin();
     blurY.begin();
-        blurY.setUniform1f("blurAmnt",0.3);
+        blurY.setUniform1f("blurAmnt",0.1);
         bpassOne.draw(0,0);
+    
+
+    ofPushMatrix();
+    ofDrawBitmapStringHighlight("reddddd",30,30,ofColor::red,ofColor::white);
+    ofPopMatrix();
     bpassTone.end();
 
     bpassTone.draw(0,0);
+
+    
    
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-fbo.begin();
-ofClear(0,0,0,255);
-fbo.end();
-   
+
+    fbo.begin();
+    ofClear(0,0,0,255);
+    fbo.end();
+    w.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    waves();
+   
+   waves();
+   
+
+  
+    
+}
+//--------------------------------------------------------------
+void ofApp::audioOut(float* ,int buffer_size, int channels){
+
 }
 
 //--------------------------------------------------------------
@@ -100,5 +122,22 @@ void ofApp::keyPressed(int key){
         img.save("saveImg/screenshot"+ofToString(ofRandom(0,1000),0)+".jpg",OF_IMAGE_QUALITY_HIGH);    
         ofLog(OF_LOG_NOTICE, "Image is save");
     }
+    if (key == 'p')
+    {       
+        song.play();
+    }
+    if (key == 's')
+    {       
+        song.stop();
+    }
+    if (key =='r')
+    {
+        rotate+=10;
+        ofLog()<<rotate;
+    }
     
+}
+//--------------------------------------------------------------
+void ofApp::exit(){
+
 }
