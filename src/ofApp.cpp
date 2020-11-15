@@ -159,8 +159,8 @@ void ofApp::draw(){
 
     waves();
 
-    string message = "A: ";
-    message+= "\nShader Reloaded :" +(string)(shader.reloadShaders()? "True":"false");
+    string message = "VA: ";
+    message+= "\n song playing :" +(string)(song.isPlaying() ? "True":"false");
     ofDrawBitmapStringHighlight(message ,0,30,ofColor::red,ofColor::white);
     
     // ofNoFill();
@@ -202,7 +202,7 @@ void ofApp::keyPressed(int key){
     }
     if (key == 's')
     {       
-        //song.stop();
+        song.stop();
     }
     if (key =='r')
     {
