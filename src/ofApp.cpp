@@ -4,7 +4,6 @@
 void ofApp::setup(){
     ofEnableAlphaBlending();
     ofEnableAntiAliasing();
-    
     ofBackground(ofColor::black);
     ofSetWindowShape(1200,900);
     ofSetCircleResolution(160);
@@ -13,9 +12,6 @@ void ofApp::setup(){
     blurX.load("blurX");
     blurY.load("blurY");
     grow =300;
-    ofSeedRandom(6);
-
-
     //fbo
     ofFboSettings s;
     s.width = ofGetWidth();
@@ -39,14 +35,19 @@ void ofApp::setup(){
     bpassTone.end();
 
     song.load("2.mp3");
-    cam.setPosition(0,0,2000);
+    cam.setPosition(0,0,1500);
 
     auto center = glm::vec3(0,0,0);
     
-    cam.lookAt(center);
+   // cam.lookAt(center);
+
+    // set DOF parameters
+    depthOfField.setup(ofGetWidth(), ofGetHeight());
+    // focalDist = 1500;
+    // focalRange = 1500;
   
 
-    rotate = 234;
+    rotate = 304;
 
 
 }
@@ -54,13 +55,14 @@ void ofApp::setup(){
 void ofApp::waves(){
 
     fbo.begin();
-    cam.begin();
+    depthOfField.begin();
+    cam.begin(depthOfField.getDimensions());
     ofNoFill();
     shader.begin();
     shader.setUniform1f("time",ofGetElapsedTimef());
     shader.setUniform2f("resolution",ofGetWidth(),ofGetHeight());
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
     ofRotateX(rotate);
 
         w.show(500, 3.4);
@@ -68,6 +70,8 @@ void ofApp::waves(){
     glDisable(GL_BLEND);
     shader.end();
     cam.end();
+    depthOfField.end();
+
     fbo.end();  
     bpassOne.begin();
    blurX.begin();
@@ -81,6 +85,7 @@ void ofApp::waves(){
     blurY.begin();
         blurY.setUniform1f("blurAmnt",0.1);
         bpassOne.draw(0,0);
+        depthOfField.getFbo().draw(0, 0);
         blurY.end();
     bpassTone.end();
 
@@ -93,6 +98,10 @@ void ofApp::waves(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
+	depthOfField.setFocalDistance(200);
+    //ofMap(sin(ofGetElapsedTimef()/2),-1,1, 10, 350)
+    depthOfField.setFocalRange(200);
+
     fbo.begin();
     ofClear(0,0,0,255);
     fbo.end();
@@ -101,19 +110,24 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-   
+
     waves();
-    ofPushMatrix();
-    ofDrawBitmapStringHighlight("Debug ",0,30,ofColor::red,ofColor::white);
-    ofPopMatrix();
+   if (!shader.reloadShaders())
+    {
+        ofPushMatrix();
+        ofDrawBitmapStringHighlight("Shader loaded",0,30,ofColor::red,ofColor::white);
+        ofPopMatrix();
+    }
+    else
+    {
+        ofPushMatrix();
+        ofDrawBitmapStringHighlight("shader no changes",0,30,ofColor::red,ofColor::white);
+        ofPopMatrix();
+    }
+    
   
     
 }
-//--------------------------------------------------------------
-void ofApp::audioOut(float* ,int buffer_size, int channels){
-
-}
-
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if (key == ' ')
@@ -135,6 +149,8 @@ void ofApp::keyPressed(int key){
         rotate+=10;
         ofLog()<<rotate;
     }
+   
+    
     
 }
 //--------------------------------------------------------------

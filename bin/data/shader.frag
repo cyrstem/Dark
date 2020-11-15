@@ -25,7 +25,7 @@ void main() {
 
   vec2 t = vec2(p.x, p.y) / min(resolution.x, resolution.y) * 2.0;
     t.xy += vec2(-resolution.x, resolution.y) / min(resolution.x, resolution.y);
-  float r = 0.5966/length (p - t) *1.9 ;
+  float r = 0.966/length (p - t) *1.9 ;
   vec3 c = vec3(smoothstep(0.03, 1.0, r),smoothstep(0.03,1.0,r),smoothstep(0.03,1.0,r));
   color += c ;
  
