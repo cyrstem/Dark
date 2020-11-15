@@ -37,10 +37,6 @@ void ofApp::setup(){
     song.load("2.mp3");
     cam.setPosition(0,0,1500);
 
-    auto center = glm::vec3(0,0,0);
-    
-   // cam.lookAt(center);
-
     // set DOF parameters
     depthOfField.setup(ofGetWidth(), ofGetHeight());
     // focalDist = 1500;
@@ -48,6 +44,22 @@ void ofApp::setup(){
   
 
     rotate = 304;
+    //Audio Staff
+
+    //audio.load("2.mp3");
+
+    ofSoundStreamSettings settings;
+    sampleRate = 44100.0;
+    settings.setOutListener(this);
+    settings.sampleRate = sampleRate;
+    settings.numOutputChannels = 2;
+    settings.numInputChannels =0;
+    settings.bufferSize =512;
+    ofSoundStreamSetup(settings);
+
+    playhead = std::numeric_limits<int>::max();
+    playheadControl = -1.0;
+    step = audio.samplerate()/sampleRate;
 
 
 }
@@ -107,24 +119,71 @@ void ofApp::update(){
     fbo.end();
     w.update();
 }
+//--------------------------------------------------------------
+void ofApp::audioOut(ofSoundBuffer & buffer){
+ if( playheadControl >= 0.0 ){
+        playhead = playheadControl;
+        playheadControl = -1.0;
+    }
+    
+    for (size_t i = 0; i < buffer.getNumFrames(); i++){
+        
+        int n = playhead;
+        
+        if( n < audio.length()-1 ){
+            
+            for( size_t k=0; k<buffer.getNumChannels(); ++k){
+                if( k < audio.channels() ){
+                    float fract = playhead - (double) n;
+                    float s0 = audio.sample( n, k );
+                    float s1 = audio.sample( n+1, k );
+                    float isample = s0*(1.0-fract) + s1*fract; // linear interpolation
+                    buffer[i*buffer.getNumChannels() + k] = isample;
+                }else{
+                    buffer[i*buffer.getNumChannels() + k] = 0.0f;
+                }
+            }
+            
+            playhead += step;
+        
+        }else{
+            buffer[i*buffer.getNumChannels()    ] = 0.0f;
+            buffer[i*buffer.getNumChannels() + 1] = 0.0f;
+            playhead = std::numeric_limits<int>::max();
+        }
 
+    }
+}
 //--------------------------------------------------------------
 void ofApp::draw(){
 
     waves();
-   if (!shader.reloadShaders())
-    {
-        ofPushMatrix();
-        ofDrawBitmapStringHighlight("Shader loaded",0,30,ofColor::red,ofColor::white);
-        ofPopMatrix();
-    }
-    else
-    {
-        ofPushMatrix();
-        ofDrawBitmapStringHighlight("shader no changes",0,30,ofColor::red,ofColor::white);
-        ofPopMatrix();
-    }
+
+    string message = "A: ";
+    message+= "\nShader Reloaded :" +(string)(shader.reloadShaders()? "True":"false");
+    ofDrawBitmapStringHighlight(message ,0,30,ofColor::red,ofColor::white);
     
+    // ofNoFill();
+    
+    // ofPushMatrix();
+    // for( int c=0; c<audio.channels(); ++c ){
+        
+    //     float max = ofGetWidth();
+    //     ofBeginShape();
+    //     for( int x=0; x<max; ++x){
+    //         int n = ofMap( x, 0, max, 0, audio.length(), true );
+    //         float val = audio.sample( n, c );
+    //         float y = ofMap( val, -1.0f, 1.0f, ofGetHeight()*0.5, 0.0f );
+    //         ofVertex( x, y );       
+    //     }
+    //     ofEndShape();        
+  
+    //     float phx = ofMap( playhead, 0, audio.length(), 0, max );
+    //     ofDrawLine( phx, 0, phx, ofGetHeight()*0.5f);
+        
+    //     ofTranslate( 0.0, ofGetHeight()*0.5 );
+    // }
+    // ofPopMatrix();
   
     
 }
@@ -139,15 +198,29 @@ void ofApp::keyPressed(int key){
     if (key == 'p')
     {       
         song.play();
+       // playheadControl = 0.0;
     }
     if (key == 's')
     {       
-        song.stop();
+        //song.stop();
     }
     if (key =='r')
     {
         rotate+=10;
         ofLog()<<rotate;
+    }
+    if( key == 'l' || key=='L'){
+       //Open the Open File Dialog
+        ofFileDialogResult openFileResult= ofSystemLoadDialog("select an audio sample"); 
+        //Check if the user opened a file
+        if (openFileResult.bSuccess){
+            string filepath = openFileResult.getPath();            
+            audio.load ( filepath );
+            step = audio.samplerate() / sampleRate;
+            ofLogVerbose("file loaded");
+        }else {
+            ofLogVerbose("User hit cancel");
+        }
     }
    
     
@@ -155,5 +228,5 @@ void ofApp::keyPressed(int key){
 }
 //--------------------------------------------------------------
 void ofApp::exit(){
-
+    ofSoundStreamClose();
 }

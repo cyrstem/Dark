@@ -1,5 +1,6 @@
-#pragma once
+#include "ofMain.h"
 
+#pragma once
 class Wave{
 	public:
 	int resolution = 300;
@@ -42,18 +43,18 @@ class Wave{
 		}
 
 
-		// for (int y = 0; y < h-1; y++)
-		// {
-		// 	for (int x = 0; x < w-1; x++)
-		// 	{
-		// 		line.addIndex(x+y*w);
-		// 		line.addIndex(x+(y+1)*w);            // 10
-		// 		// line.addIndex((x+1)+y*w);            // 1
-		// 		// line.addIndex((x+1)+y*w); 
-		// 		// line.addIndex(x+(y+1)*w);           // 1  
-		// 	}
+		for (int y = 0; y < h-1; y++)
+		{
+			for (int x = 0; x < w-1; x++)
+			{
+				line.addIndex(x+y*w);
+				line.addIndex(x+(y+1)*w);            // 10
+				// line.addIndex((x+1)+y*w);            // 1
+				// line.addIndex((x+1)+y*w); 
+				// line.addIndex(x+(y+1)*w);           // 1  
+			}
 			
-		// }
+		}
 		line.drawWireframe();
 	}
 };
