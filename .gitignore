@@ -11,6 +11,7 @@ obj/*
 *.mp3
 *.svg
 *.jpeg
+*.jpg
 of_vscode.sh
 config.make
 Makefile
