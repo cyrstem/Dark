@@ -60,7 +60,9 @@ void ofApp::setup(){
     playhead = std::numeric_limits<int>::max();
     playheadControl = -1.0;
     step = audio.samplerate()/sampleRate;
-
+    
+    volume = song.getVolume();
+    
 
 }
 //--------------------------------------------------------------
@@ -87,7 +89,7 @@ void ofApp::waves(){
     fbo.end();  
     bpassOne.begin();
    blurX.begin();
-     blurX.setUniform1f("blurAmnt",2.1);
+     blurX.setUniform1f("blurAmnt",0.1);
      fbo.draw(0,0);
     blurX.end();
    bpassOne.end();
@@ -95,7 +97,7 @@ void ofApp::waves(){
     bpassTone.begin();
 
     blurY.begin();
-        blurY.setUniform1f("blurAmnt",2.1);
+        blurY.setUniform1f("blurAmnt",0.1);
         bpassOne.draw(0,0);
         depthOfField.getFbo().draw(0, 0);
         blurY.end();
@@ -198,6 +200,7 @@ void ofApp::keyPressed(int key){
     if (key == 'p')
     {       
         song.play();
+        ofLog()<<song.getVolume();
        // playheadControl = 0.0;
     }
     if (key == 's')
@@ -222,6 +225,22 @@ void ofApp::keyPressed(int key){
             ofLogVerbose("User hit cancel");
         }
     }
+
+
+    // if (key == OF_KEY_UP)     
+    // {
+       
+    //     song.setVolume(volume+ 0.1);
+    //     ofLog()<<volume;
+    //     // song.setVolume(masV); 
+    // }
+    //  if (key == OF_KEY_DOWN)     
+    // {
+    
+    //     song.setVolume(volume- 0.1); 
+    //     ofLog()<<volume;
+    // }
+    
    
     
     

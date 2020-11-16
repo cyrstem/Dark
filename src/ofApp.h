@@ -38,6 +38,8 @@ class ofApp : public ofBaseApp{
 		Wave w;
 		float rotate;
 
+		float volume;
+
 
 		
 };
