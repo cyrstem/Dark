@@ -1,5 +1,5 @@
 #include "Particle.h"
-//------------------------------------------------------------
+
 Particle::Particle(){
     auto pos = glm::vec2(0,0);
     damping = 0.09f;

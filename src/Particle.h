@@ -7,8 +7,10 @@ class Particle
         glm::vec2 pos;
         glm::vec2 vel;
         glm::vec2 frc;
+
     Particle();
-        virtual ~Particle(){}
+    virtual ~Particle(){}
+    
     void resetForce();
     void addForce(float x, float y);
     void addDampingForce();
