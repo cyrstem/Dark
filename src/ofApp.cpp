@@ -48,22 +48,28 @@ void ofApp::setup(){
 
     //audio.load("2.mp3");
 
-    ofSoundStreamSettings settings;
-    sampleRate = 44100.0;
-    settings.setOutListener(this);
-    settings.sampleRate = sampleRate;
-    settings.numOutputChannels = 2;
-    settings.numInputChannels =0;
-    settings.bufferSize =512;
-    ofSoundStreamSetup(settings);
+    // ofSoundStreamSettings settings;
+    // sampleRate = 44100.0;
+    // settings.setOutListener(this);
+    // settings.sampleRate = sampleRate;
+    // settings.numOutputChannels = 2;
+    // settings.numInputChannels =0;
+    // settings.bufferSize =512;
+    // ofSoundStreamSetup(settings);
 
-    playhead = std::numeric_limits<int>::max();
-    playheadControl = -1.0;
-    step = audio.samplerate()/sampleRate;
-    
-    volume = song.getVolume();
+    // playhead = std::numeric_limits<int>::max();
+    // playheadControl = -1.0;
+    // step = audio.samplerate()/sampleRate;  
+
+    for (int i = 0; i < 1000; i++)
+    {
+        Particle mP;
+        mP.setInitialCondition(ofRandom(0,1000),ofRandom(0,1000),0,0);
+        
+    }
     
 
+    
 }
 //--------------------------------------------------------------
 void ofApp::waves(){
@@ -80,6 +86,12 @@ void ofApp::waves(){
     ofRotateX(rotate);
 
         w.show(500, 3.4);
+
+        // for (int i = 0; i < p.size(); i++)
+        // {
+        //     p[i].draw();
+        // }
+        
 
     glDisable(GL_BLEND);
     shader.end();
@@ -106,6 +118,8 @@ void ofApp::waves(){
     bpassTone.draw(0,0);
 
     
+
+    
    
 }
 
@@ -120,42 +134,52 @@ void ofApp::update(){
     ofClear(0,0,0,255);
     fbo.end();
     w.update();
+
+    // for (int i = 0; i < p.size(); i++)
+    // {
+    //     p[i].resetForce();
+    //     p[i].addAttractionForce(mouseX,mouseY,1000,0.1);
+    //     p[i].addRepulsionForce(mouseX,mouseY, 60, 1);
+    //     p[i].addDampingForce();
+    //     p[i].update();
+    // }
+    
 }
 //--------------------------------------------------------------
-void ofApp::audioOut(ofSoundBuffer & buffer){
- if( playheadControl >= 0.0 ){
-        playhead = playheadControl;
-        playheadControl = -1.0;
-    }
+// void ofApp::audioOut(ofSoundBuffer & buffer){
+//  if( playheadControl >= 0.0 ){
+//         playhead = playheadControl;
+//         playheadControl = -1.0;
+//     }
     
-    for (size_t i = 0; i < buffer.getNumFrames(); i++){
+//     for (size_t i = 0; i < buffer.getNumFrames(); i++){
         
-        int n = playhead;
+//         int n = playhead;
         
-        if( n < audio.length()-1 ){
+//         if( n < audio.length()-1 ){
             
-            for( size_t k=0; k<buffer.getNumChannels(); ++k){
-                if( k < audio.channels() ){
-                    float fract = playhead - (double) n;
-                    float s0 = audio.sample( n, k );
-                    float s1 = audio.sample( n+1, k );
-                    float isample = s0*(1.0-fract) + s1*fract; // linear interpolation
-                    buffer[i*buffer.getNumChannels() + k] = isample;
-                }else{
-                    buffer[i*buffer.getNumChannels() + k] = 0.0f;
-                }
-            }
+//             for( size_t k=0; k<buffer.getNumChannels(); ++k){
+//                 if( k < audio.channels() ){
+//                     float fract = playhead - (double) n;
+//                     float s0 = audio.sample( n, k );
+//                     float s1 = audio.sample( n+1, k );
+//                     float isample = s0*(1.0-fract) + s1*fract; // linear interpolation
+//                     buffer[i*buffer.getNumChannels() + k] = isample;
+//                 }else{
+//                     buffer[i*buffer.getNumChannels() + k] = 0.0f;
+//                 }
+//             }
             
-            playhead += step;
+//             playhead += step;
         
-        }else{
-            buffer[i*buffer.getNumChannels()    ] = 0.0f;
-            buffer[i*buffer.getNumChannels() + 1] = 0.0f;
-            playhead = std::numeric_limits<int>::max();
-        }
+//         }else{
+//             buffer[i*buffer.getNumChannels()    ] = 0.0f;
+//             buffer[i*buffer.getNumChannels() + 1] = 0.0f;
+//             playhead = std::numeric_limits<int>::max();
+//         }
 
-    }
-}
+//     }
+// }
 //--------------------------------------------------------------
 void ofApp::draw(){
 

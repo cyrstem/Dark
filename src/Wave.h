@@ -1,6 +1,6 @@
+#pragma once
 #include "ofMain.h"
 
-#pragma once
 class Wave
 {
 	public:

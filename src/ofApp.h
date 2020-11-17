@@ -5,6 +5,7 @@
 #include "ofxDOF.h"
 #include "ofxAudioFile.h"
 #include "Wave.h"
+#include "Particle.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -12,7 +13,7 @@ class ofApp : public ofBaseApp{
 		void update();
 		void waves();
 		void draw();
-		void audioOut(ofSoundBuffer & buffer);
+		//void audioOut(ofSoundBuffer & buffer);
 		
 		void keyPressed(int key);
 		void exit();
@@ -39,7 +40,6 @@ class ofApp : public ofBaseApp{
 		float rotate;
 
 		float volume;
-
-
+		vector<Particle>p;
 		
 };
