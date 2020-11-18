@@ -41,5 +41,6 @@ class ofApp : public ofBaseApp{
 
 		float volume;
 		vector<Particle>p;
+		vector<ofPoint> vPosition;
 		
 };

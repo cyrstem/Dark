@@ -8,11 +8,13 @@ Particle::Particle(){
 void Particle::resetForce(){
     auto frc = glm::vec2(0,0);
 }
+
 //------------------------------------------------------------
 void Particle::addForce(float x, float y){
     frc.x = frc.x +x;
     frc.y = frc.y +y;
 }
+
 //------------------------------------------------------------
 void Particle::addDampingForce(){
 	
@@ -53,38 +55,7 @@ void Particle::addAttractionForce( float px, float py, float radius, float stren
         frc.y +=diff.y * pct * strength;
     }
 }
-//------------------------------------------------------------
-void Particle::addClockwiseForce( float px, float py, float radius, float strength){
-	
-	
-    auto posoOfForce = glm::vec2(px,py);
-    auto diff = pos -posoOfForce;
 
-    if (diff.length() < radius)
-    {   
-        float pct = 1 -(diff.length() /radius);
-        glm::normalize(diff);
-        frc.x +=diff.x * pct * strength;
-        frc.y +=diff.y * pct * strength;
-    }
-	
-}
-
-//------------------------------------------------------------
-void Particle::addCounterClockwiseForce( float px, float py, float radius, float strength){
-	
-    auto posoOfForce = glm::vec2(px,py);
-    auto diff = pos -posoOfForce;
-
-    if (diff.length() < radius)
-    {   
-        float pct = 1 -(diff.length() /radius);
-        glm::normalize(diff);
-        frc.x +=diff.x * pct * strength;
-        frc.y +=diff.y * pct * strength;
-    }
-	
-}
 
 //------------------------------------------------------------
 void Particle::setInitialCondition(float px, float py, float vx, float vy){
@@ -101,5 +72,7 @@ void Particle::update(){
 }
 //------------------------------------------------------------
 void Particle::draw(){
-    ofDrawCircle(pos.x,pos.y,3);
+    ofSetColor(ofColor::white);
+    ofFill();
+    ofDrawCircle(pos.x,pos.y,10);
 }

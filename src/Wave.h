@@ -7,11 +7,15 @@ class Wave
 	int resolution;
     float radius;
 	float reaction;
+	//vector<ofPoint>attractor;
+	
+	ofPoint attract;
 	ofMesh line;
+
 
 	Wave() {
 		line.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
-		resolution = 600;
+		resolution = 250;
 	}	
 
 	
@@ -52,7 +56,10 @@ class Wave
 			
 			//line.addColor(ofColor::fromHsb((255.0*i)/noiseHeight,255,255));
 		}
+		
+		// attract = line.getCentroid();
 
+		// ofLog()<<line.getTexCoords();
 
 		// for (int y = 0; y < h-1; y++)
 		// {
@@ -67,5 +74,9 @@ class Wave
 			
 		// }
 		line.draw();
+	
+		//ofLog()<<line.getVertices();
+		
 	}
+
 };

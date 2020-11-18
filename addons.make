@@ -1,3 +1,3 @@
+ofxAudioFile
 ofxAutoReloadedShader
 ofxDOF
-ofxAudioFile

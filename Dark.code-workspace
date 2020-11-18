@@ -4,15 +4,17 @@
 			"path": "."
 		},
 		{
+			"path" : "${workspaceRoot}/../../../../addons/ofxAudioFile"
+		},
+		{
 			"path" : "${workspaceRoot}/../../../../addons/ofxAutoReloadedShader"
+		},
+		{
+			"path" : "${workspaceRoot}/../../../../addons/ofxDOF"
 		},
 		{
 			"path": "${workspaceRoot}/../../../../libs/openFrameworks"
 		}
 	],
-	"settings": {
-		"files.associations": {
-			"limits": "cpp"
-		}
-	}
+	"settings": {}
 }

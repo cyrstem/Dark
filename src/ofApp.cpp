@@ -64,7 +64,9 @@ void ofApp::setup(){
     for (int i = 0; i < 1000; i++)
     {
         Particle mP;
-        mP.setInitialCondition(ofRandom(0,1000),ofRandom(0,1000),0,0);
+        mP.setInitialCondition(ofRandom(0,1000),ofRandom(0,1000),100,0);
+       // mP.damping =ofRandom(0.01,0.05);
+        p.push_back(mP);
         
     }
     
@@ -85,12 +87,12 @@ void ofApp::waves(){
     
     ofRotateX(rotate);
 
-        w.show(500, 3.4);
+        w.show(500, 1.4);
 
-        // for (int i = 0; i < p.size(); i++)
-        // {
-        //     p[i].draw();
-        // }
+        for (int i = 0; i < p.size(); i++)
+        {
+            p[i].draw();
+        }
         
 
     glDisable(GL_BLEND);
@@ -125,6 +127,7 @@ void ofApp::waves(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+   // ofLog()<<w.attract;
 
 	depthOfField.setFocalDistance(200);
     //ofMap(sin(ofGetElapsedTimef()/2),-1,1, 10, 350)
@@ -134,15 +137,16 @@ void ofApp::update(){
     ofClear(0,0,0,255);
     fbo.end();
     w.update();
+    
 
-    // for (int i = 0; i < p.size(); i++)
-    // {
-    //     p[i].resetForce();
-    //     p[i].addAttractionForce(mouseX,mouseY,1000,0.1);
-    //     p[i].addRepulsionForce(mouseX,mouseY, 60, 1);
-    //     p[i].addDampingForce();
-    //     p[i].update();
-    // }
+    for (int i = 0; i < p.size(); i++)
+    {
+        p[i].resetForce();
+        //p[i].addAttractionForce(w.attract.x,w.attract.y,0,0.1);
+        p[i].addRepulsionForce(mouseX-50,mouseY-50, 60, 1);
+        p[i].addDampingForce();
+        p[i].update();
+    }
     
 }
 //--------------------------------------------------------------
